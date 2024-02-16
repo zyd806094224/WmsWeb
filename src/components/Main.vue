@@ -11,7 +11,18 @@
 
 <script>
 export default {
-  name: 'Main'
+  // eslint-disable-next-line vue/multi-word-component-names
+  name: 'Main',
+  data() {
+    const item = {
+      date: '2016-05-02',
+      name: '王小虎',
+      address: '上海市普陀区金沙江路 1518 弄'
+    };
+    return {
+      tableData: Array(10).fill(item)
+    }
+  }
 }
 </script>
 

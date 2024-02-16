@@ -1,13 +1,14 @@
 <template>
   <el-container style="height: 100%; border: 1px solid #eee">
-    <el-aside width="200px" style="background-color: rgb(238, 241, 246);height: 100%">
-      <Aside></Aside>
+    <el-aside :width="aside_width" style="background-color: rgb(238, 241, 246);height: 100%;margin-left: -1px">
+      <Aside :isCollapse="isCollapse"></Aside>
     </el-aside>
     <el-container style="height: 100%;">
-      <el-header style="text-align: right; font-size: 12px">
-        <Header></Header>
+      <el-header
+          style="text-align: right; font-size: 12px;height: 100%;border-bottom: rgba(168,168,168,0.3) 1px solid;">
+        <Header @doCollapse="doCollapse" :icon="icon"></Header>
       </el-header>
-      <el-main>
+      <el-main style="height: 100%">
         <Main></Main>
       </el-main>
     </el-container>
@@ -18,18 +19,30 @@
 import Aside from "@/components/Aside";
 import Header from "@/components/Header";
 import Main from "@/components/Main";
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Index",
   components: {Main, Header, Aside},
   data() {
-    const item = {
-      date: '2016-05-02',
-      name: '王小虎',
-      address: '上海市普陀区金沙江路 1518 弄'
-    };
     return {
-      tableData: Array(10).fill(item)
+      isCollapse: false,
+      aside_width: '200px',
+      icon: 'el-icon-s-fold'
+    }
+  },
+  methods: {
+    doCollapse() {
+      console.log('doCollapse')
+      // eslint-disable-next-line vue/no-mutating-props
+      this.isCollapse = !this.isCollapse
+      if (!this.isCollapse) {//展开状态
+        this.aside_width = '200px'
+        this.icon = 'el-icon-s-fold'
+      } else {//折叠状态
+        this.aside_width = '64px'
+        this.icon = 'el-icon-s-unfold'
+      }
     }
   }
 }
@@ -37,7 +50,6 @@ export default {
 
 <style scoped>
 .el-header {
-  background-color: #B3C0D1;
   color: #333;
   line-height: 60px;
 }

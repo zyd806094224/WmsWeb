@@ -1,5 +1,19 @@
 <template>
   <div>
+    <div style="margin-bottom: 5px;">
+      <el-input v-model="name" placeholder="请输入名字" suffix-icon="el-icon-search" style="width: 200px;"
+                @keyup.enter.native="loadPost"></el-input>
+      <el-select v-model="sex" placeholder="请选择性别" style="margin-left: 5px">
+        <el-option
+            v-for="item in sexs"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+        </el-option>
+      </el-select>
+      <el-button type="primary" style="margin-left: 5px" @click="loadPost">查询</el-button>
+      <el-button type="success" @click="resetParam">重置</el-button>
+    </div>
     <el-table :data="tableData" :header-cell-style="{background: '#f2f5fc',color: '#555'}" border>
       <el-table-column prop="id" label="ID" width="60">
       </el-table-column>
@@ -51,7 +65,16 @@ export default {
       tableData: [],
       pageNum: 1,
       pageSize: 2,
-      total: 0
+      total: 0,
+      name: '',
+      sex: '',
+      sexs: [{
+        value: '1',
+        label: '男'
+      }, {
+        value: '0',
+        label: '女'
+      }]
     }
   },
   methods: {
@@ -66,7 +89,11 @@ export default {
     loadPost() {
       this.$axios.post(this.$httpUrl + '/user/listPageCC2', {
         pageSize: this.pageSize,
-        pageNum: this.pageNum
+        pageNum: this.pageNum,
+        param: {
+          name: this.name,
+          sex: this.sex
+        }
       })
           .then(res => res.data)
           .then(res => {
@@ -89,6 +116,10 @@ export default {
       console.log(`当前页: ${val}`);
       this.pageNum = val
       this.loadPost()
+    },
+    resetParam() {
+      this.name = ''
+      this.sex = ''
     }
   },
   beforeMount() {

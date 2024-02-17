@@ -10,7 +10,8 @@ Vue.prototype.$httpUrl = 'http://localhost:8088'
 
 Vue.config.productionTip = false
 
-Vue.use(ElementUI);
+// Vue.use(ElementUI);
+Vue.use(ElementUI,{size: 'small'});
 
 new Vue({
     el: '#app',

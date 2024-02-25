@@ -1,5 +1,5 @@
 <template>
-  <el-menu style="height: 100vh" default-active="/Home"
+  <el-menu style="height: 100%" default-active="/Home"
            background-color="#545c64"
            text-color="#fff"
            active-text-color="#ffd04b"

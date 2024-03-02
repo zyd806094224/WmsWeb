@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1>{{'欢迎你' /*+ user.name*/}}</h1>
-<!--    <el-descriptions title="个人中心" :column="2" size="40" border>
+    <h1>{{'欢迎你' + user.name}}</h1>
+    <el-descriptions title="个人中心" :column="2" size="40" border>
       <el-descriptions-item>
         <template slot="label">
           <i class="el-icon-s-custom"></i>
@@ -37,15 +37,34 @@
         </el-tag>
       </el-descriptions-item>
     </el-descriptions>
-    <DateUtils></DateUtils>-->
+    <DateUtils></DateUtils>
   </div>
 
 </template>
 
 <script>
+import DateUtils from "./DateUtils";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: "Home"
+  name: "Home",
+  components: {DateUtils},
+  data() {
+
+    return {
+      user:{}
+    }
+  },
+  computed:{
+
+  },
+  methods:{
+    init(){
+      this.user = JSON.parse(sessionStorage.getItem('CurUser'))
+    }
+  },
+  created(){
+    this.init()
+  }
 }
 </script>
 

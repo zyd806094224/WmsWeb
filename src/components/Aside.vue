@@ -11,15 +11,9 @@
       <i class="el-icon-s-home"></i>
       <span slot="title">首页</span>
     </el-menu-item>
-
-    <el-menu-item index="/One">
-      <i class="el-icon-s-flag"></i>
-      <span slot="title">导航一</span>
-    </el-menu-item>
-
-    <el-menu-item index="/Two">
-      <i class="el-icon-s-opportunity"></i>
-      <span slot="title">导航二</span>
+    <el-menu-item :index="'/' + item.menuClick" v-for="(item,i) in menu" :key="i">
+      <i :class="item.menuIcon"></i>
+      <span slot="title">{{item.menuName}}</span>
     </el-menu-item>
   </el-menu>
 </template>
@@ -29,7 +23,20 @@ export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Aside",
   data() {
-    return {}
+    return {
+      menu:[
+        {
+          menuClick:'Admin',
+          menuName:'管理员管理',
+          menuIcon:'el-icon-s-custom'
+        },
+        {
+          menuClick:'User',
+          menuName:'用户管理',
+          menuIcon:'el-icon-user-solid'
+        }
+      ]
+    }
   },
   props: {
     isCollapse: Boolean

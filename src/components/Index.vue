@@ -9,7 +9,7 @@
         <Header @doCollapse="doCollapse" :icon="icon"></Header>
       </el-header>
       <el-main style="height: 100%">
-        <Main></Main>
+        <router-view/>
       </el-main>
     </el-container>
   </el-container>
@@ -18,12 +18,11 @@
 <script>
 import Aside from "@/components/Aside";
 import Header from "@/components/Header";
-import Main from "@/components/Main";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Index",
-  components: {Main, Header, Aside},
+  components: {Header, Aside},
   data() {
     return {
       isCollapse: false,

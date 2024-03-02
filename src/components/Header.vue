@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     toUser() {
-
+      this.$router.push('/Home')
     },
     logout() {
       this.$confirm('确定要退出登录？', '提示', {
@@ -49,6 +49,9 @@ export default {
     collapse() {
       this.$emit('doCollapse')
     }
+  },
+  created() {
+    this.$router.push('/Home')
   }
 }
 </script>

@@ -24,7 +24,7 @@ export default {
   name: "Aside",
   data() {
     return {
-      menu:[
+      /*menu:[
         {
           menuClick:'Admin',
           menuName:'管理员管理',
@@ -35,7 +35,14 @@ export default {
           menuName:'用户管理',
           menuIcon:'el-icon-user-solid'
         }
-      ]
+      ]*/
+    }
+  },
+  computed: {
+    "menu": {
+      get(){
+        return this.$store.state.menu
+      }
     }
   },
   props: {

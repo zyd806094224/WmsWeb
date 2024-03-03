@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="margin-bottom: 5px;">
-      <el-input v-model="name" placeholder="请输入仓库名" suffix-icon="el-icon-search" style="width: 200px;"
+      <el-input v-model="name" placeholder="请输入分类名" suffix-icon="el-icon-search" style="width: 200px;"
                 @keyup.enter.native="loadPost"></el-input>
       <el-button type="primary" style="margin-left: 5px" @click="loadPost">查询</el-button>
       <el-button type="success" @click="resetParam">重置</el-button>
@@ -10,7 +10,7 @@
     <el-table :data="tableData" :header-cell-style="{background: '#f2f5fc',color: '#555'}" border>
       <el-table-column prop="id" label="ID" width="60">
       </el-table-column>
-      <el-table-column prop="name" label="仓库名" width="180">
+      <el-table-column prop="name" label="分类名" width="180">
       </el-table-column>
       <el-table-column prop="remark" label="备注">
       </el-table-column>
@@ -41,7 +41,7 @@
         width="30%"
         center>
       <el-form ref="form" :rules="rules" :model="form" label-width="80px">
-        <el-form-item label="仓库名" prop="name">
+        <el-form-item label="分类名" prop="name">
           <el-col :span="20">
             <el-input v-model="form.name"></el-input>
           </el-col>
@@ -63,7 +63,7 @@
 <script>
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'StorageMange',
+  name: 'GoodsTypeMange',
   data() {
     return {
       tableData: [],
@@ -79,7 +79,7 @@ export default {
       },
       rules: {
         name: [
-          {required: true, message: '请输入仓库名', trigger: 'blur'},
+          {required: true, message: '请输入分类名', trigger: 'blur'},
           {min: 3, max: 8, message: '长度在 3 到 8 个字符', trigger: 'blur'}
         ]
       }
@@ -90,7 +90,7 @@ export default {
       this.$refs.form.resetFields();
     },
     doSave() {
-      this.$axios.post(this.$httpUrl + '/storage/save', this.form)
+      this.$axios.post(this.$httpUrl + '/goodstype/save', this.form)
           .then(res => res.data)
           .then(res => {
             if (res.code == 200) {
@@ -110,7 +110,7 @@ export default {
           })
     },
     doMod() {
-      this.$axios.post(this.$httpUrl + '/storage/update', this.form)
+      this.$axios.post(this.$httpUrl + '/goodstype/update', this.form)
           .then(res => res.data)
           .then(res => {
             if (res.code == 200) {
@@ -158,7 +158,7 @@ export default {
       })
     },
     del(id) {
-      this.$axios.get(this.$httpUrl + '/storage/del?id=' + id)
+      this.$axios.get(this.$httpUrl + '/goodstype/del?id=' + id)
           .then(res => res.data)
           .then(res => {
             if (res.code == 200) {
@@ -177,7 +177,7 @@ export default {
           })
     },
     loadPost() {
-      this.$axios.post(this.$httpUrl + '/storage/listPage', {
+      this.$axios.post(this.$httpUrl + '/goodstype/listPage', {
         pageSize: this.pageSize,
         pageNum: this.pageNum,
         param: {

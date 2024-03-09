@@ -3,6 +3,24 @@
     <div style="margin-bottom: 5px;">
       <el-input v-model="name" placeholder="请输入物品名" suffix-icon="el-icon-search" style="width: 200px;"
                 @keyup.enter.native="loadPost"></el-input>
+
+      <el-select v-model="storage" placeholder="请选择仓库" style="margin-left: 5px;">
+        <el-option
+            v-for="item in storageData"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id">
+        </el-option>
+      </el-select>
+      <el-select v-model="goodsType" placeholder="请选择分类" style="margin-left: 5px;">
+        <el-option
+            v-for="item in goodsTypeData"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id">
+        </el-option>
+      </el-select>
+
       <el-button type="primary" style="margin-left: 5px" @click="loadPost">查询</el-button>
       <el-button type="success" @click="resetParam">重置</el-button>
       <el-button type="primary" style="margin-left: 5px" @click="add">新增</el-button>
@@ -54,12 +72,26 @@
         </el-form-item>
         <el-form-item label="仓库" prop="storage">
           <el-col :span="20">
-            <el-input v-model="form.storage"></el-input>
+            <el-select v-model="form.storage" placeholder="请选择仓库">
+              <el-option
+                  v-for="item in storageData"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+              </el-option>
+            </el-select>
           </el-col>
         </el-form-item>
         <el-form-item label="分类" prop="goodsType">
           <el-col :span="20">
-            <el-input v-model="form.goodsType"></el-input>
+            <el-select v-model="form.goodsType" placeholder="请选择分类">
+              <el-option
+                  v-for="item in goodsTypeData"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+              </el-option>
+            </el-select>
           </el-col>
         </el-form-item>
         <el-form-item label="数量" prop="count">
@@ -97,6 +129,8 @@ export default {
       goodsTypeData: [],
       storageData: [],
       tableData: [],
+      storage:'',
+      goodsType:'',
       pageNum: 1,
       pageSize: 10,
       total: 0,
@@ -242,7 +276,9 @@ export default {
         pageSize: this.pageSize,
         pageNum: this.pageNum,
         param: {
-          name: this.name
+          name: this.name,
+          storage: this.storage + '',
+          goodsType: this.goodsType + ''
         }
       })
           .then(res => res.data)
@@ -293,6 +329,8 @@ export default {
     },
     resetParam() {
       this.name = ''
+      this.storage = ''
+      this.goodsType = ''
     }
   },
   beforeMount() {

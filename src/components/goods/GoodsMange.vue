@@ -163,6 +163,7 @@
 
 <script>
 import SelectUser from "@/components/user/SelectUser";
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'GoodsMange',
@@ -180,8 +181,8 @@ export default {
       goodsTypeData: [],
       storageData: [],
       tableData: [],
-      storage:'',
-      goodsType:'',
+      storage: '',
+      goodsType: '',
       pageNum: 1,
       pageSize: 10,
       total: 0,
@@ -189,12 +190,8 @@ export default {
       centerDialogVisible: false,
       inDialogVisible: false,
       innerVisible: false,
-      currentRow: {
-
-      },
-      tempUser:{
-
-      },
+      currentRow: {},
+      tempUser: {},
       form: {
         id: '',
         name: '',
@@ -203,7 +200,7 @@ export default {
         count: '',
         remark: ''
       },
-      form1:{
+      form1: {
         goods: '',
         goodsname: '',
         count: '',
@@ -211,16 +208,14 @@ export default {
         userId: '',
         admin_id: '',
         remark: '',
-        action: '1',
+        action: '1', //1入库、2出库、3新增物品方式入库
         createtime: Date.now()
       },
-      rules1: {
-
-      },
+      rules1: {},
       rules: {
         name: [
           {required: true, message: '请输入物品名', trigger: 'blur'},
-          {min: 1, max: 8, message: '长度在 3 到 8 个字符', trigger: 'blur'}
+          {min: 1, max: 8, message: '长度在 1 到 8 个字符', trigger: 'blur'}
         ],
         storage: [
           {required: true, message: '请选择仓库', trigger: 'blur'}
@@ -237,28 +232,28 @@ export default {
     }
   },
   methods: {
-    doSelectUser(val){
+    doSelectUser(val) {
       this.tempUser = val
       console.log(this.tempUser)
     },
-    confirmUser(){
+    confirmUser() {
       this.form1.username = this.tempUser.name
       this.form1.userId = this.tempUser.id
       this.innerVisible = false
     },
-    selectUser(){
+    selectUser() {
       this.innerVisible = true
     },
     selectCurrentChange(val) {
       this.currentRow = val;
     },
-    formatStorage(row){
+    formatStorage(row) {
       let temp = this.storageData.find(item => {
         return item.id === row.storage
       })
       return temp && temp.name
     },
-    formatGoodsType(row){
+    formatGoodsType(row) {
       let temp = this.goodsTypeData.find(item => {
         return item.id === row.goodsType
       })
@@ -271,15 +266,18 @@ export default {
       this.$refs.form1.resetFields();
     },
     doSave() {
-      console.log(this.form)
       this.$axios.post(this.$httpUrl + '/goods/save', this.form)
           .then(res => res.data)
           .then(res => {
             if (res.code == 200) {
+              console.log(res)
               this.$message({
                 message: '操作成功',
                 type: 'success'
               });
+              this.form1.goods = res.data.id
+              this.form1.count = res.data.count
+              this.doInGoods2()
               this.centerDialogVisible = false
               this.loadPost()
               this.resetForm()
@@ -320,6 +318,9 @@ export default {
                 message: '操作成功',
                 type: 'success'
               });
+              this.form1.goods = res.data.id
+              this.form1.count = res.data.count
+              this.doInGoods2()
               this.centerDialogVisible = false
               this.loadPost()
             } else {
@@ -351,8 +352,32 @@ export default {
         this.form.id = ''
       })
     },
-    outGoods(){
-      if(!this.currentRow.id){
+    doInGoods2() { //用户点击货物新增按钮的入库记录
+      this.form1.username = this.user.name
+      this.form1.userId = this.user.id
+      this.form1.goodsname = this.form.name
+      this.form1.admin_id = this.user.id
+      this.form1.userId = this.user.id
+      this.form1.action = '3'
+      this.$axios.post(this.$httpUrl + '/record/save', this.form1)
+          .then(res => res.data)
+          .then(res => {
+            if (res.code == 200) {
+              // this.$message({
+              //   message: '操作成功',
+              //   type: 'success'
+              // });
+              this.loadPost()
+            } else {
+              this.$message({
+                message: '操作失败',
+                type: 'error'
+              });
+            }
+          })
+    },
+    outGoods() {
+      if (!this.currentRow.id) {
         alert('请选择记录')
         return;
       }
@@ -366,7 +391,7 @@ export default {
       this.form1.action = '2'
     },
     inGoods() {
-      if(!this.currentRow.id){
+      if (!this.currentRow.id) {
         alert('请选择记录')
         return;
       }
@@ -431,7 +456,7 @@ export default {
             }
           })
     },
-    loadStorage(){
+    loadStorage() {
       this.$axios.get(this.$httpUrl + '/storage/list')
           .then(res => res.data)
           .then(res => {
@@ -443,7 +468,7 @@ export default {
             }
           })
     },
-    loadGoodsType(){
+    loadGoodsType() {
       this.$axios.get(this.$httpUrl + '/goodstype/list')
           .then(res => res.data)
           .then(res => {

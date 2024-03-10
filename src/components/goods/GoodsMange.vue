@@ -24,8 +24,12 @@
       <el-button type="primary" style="margin-left: 5px" @click="loadPost">查询</el-button>
       <el-button type="success" @click="resetParam">重置</el-button>
       <el-button type="primary" style="margin-left: 5px" @click="add">新增</el-button>
+      <el-button type="primary" style="margin-left: 5px" @click="inGoods">入库</el-button>
+      <el-button type="primary" style="margin-left: 5px" @click="outGoods">出库</el-button>
     </div>
-    <el-table :data="tableData" :header-cell-style="{background: '#f2f5fc',color: '#555'}" border>
+    <el-table :data="tableData" :header-cell-style="{background: '#f2f5fc',color: '#555'}" border
+              highlight-current-row
+              @current-change="selectCurrentChange">
       <el-table-column prop="id" label="ID" width="60">
       </el-table-column>
       <el-table-column prop="name" label="物品名" width="180">
@@ -110,13 +114,59 @@
     <el-button type="primary" @click="save">确 定</el-button>
   </span>
     </el-dialog>
+
+    <el-dialog
+        title="出入库"
+        :visible.sync="inDialogVisible"
+        width="30%"
+        center>
+      <el-dialog
+          width="75%"
+          title="用户选择"
+          :visible.sync="innerVisible"
+          append-to-body>
+        <SelectUser @doSelectUser="doSelectUser"></SelectUser>
+        <span slot="footer" class="dialog-footer">
+    <el-button @click="innerVisible = false">取 消</el-button>
+    <el-button type="primary" @click="confirmUser">确 定</el-button>
+  </span>
+      </el-dialog>
+      <el-form ref="form1" :rules="rules1" :model="form1" label-width="80px">
+        <el-form-item label="物品名" prop="name">
+          <el-col :span="20">
+            <el-input v-model="form1.goodsname" readonly></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="申请人" prop="name">
+          <el-col :span="20">
+            <el-input v-model="form1.username" readonly @click.native="selectUser"></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="数量" prop="count">
+          <el-col :span="20">
+            <el-input v-model="form1.count"></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-col :span="20">
+            <el-input type="textarea" v-model="form1.remark"></el-input>
+          </el-col>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="inDialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="doInGoods">确 定</el-button>
+  </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import SelectUser from "@/components/user/SelectUser";
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'GoodsMange',
+  components: {SelectUser},
   data() {
     let checkCount = (rule, value, callback) => {
       if (value > 9999) {
@@ -126,6 +176,7 @@ export default {
       }
     };
     return {
+      user: JSON.parse(sessionStorage.getItem('CurUser')),
       goodsTypeData: [],
       storageData: [],
       tableData: [],
@@ -136,6 +187,14 @@ export default {
       total: 0,
       name: '',
       centerDialogVisible: false,
+      inDialogVisible: false,
+      innerVisible: false,
+      currentRow: {
+
+      },
+      tempUser:{
+
+      },
       form: {
         id: '',
         name: '',
@@ -144,10 +203,23 @@ export default {
         count: '',
         remark: ''
       },
+      form1:{
+        goods: '',
+        goodsname: '',
+        count: '',
+        username: '',
+        userId: '',
+        admin_id: '',
+        remark: '',
+        action: '1'
+      },
+      rules1: {
+
+      },
       rules: {
         name: [
           {required: true, message: '请输入物品名', trigger: 'blur'},
-          {min: 3, max: 8, message: '长度在 3 到 8 个字符', trigger: 'blur'}
+          {min: 1, max: 8, message: '长度在 3 到 8 个字符', trigger: 'blur'}
         ],
         storage: [
           {required: true, message: '请选择仓库', trigger: 'blur'}
@@ -164,6 +236,21 @@ export default {
     }
   },
   methods: {
+    doSelectUser(val){
+      this.tempUser = val
+      console.log(this.tempUser)
+    },
+    confirmUser(){
+      this.form1.username = this.tempUser.name
+      this.form1.userId = this.tempUser.id
+      this.innerVisible = false
+    },
+    selectUser(){
+      this.innerVisible = true
+    },
+    selectCurrentChange(val) {
+      this.currentRow = val;
+    },
     formatStorage(row){
       let temp = this.storageData.find(item => {
         return item.id === row.storage
@@ -179,6 +266,9 @@ export default {
     resetForm() {
       this.$refs.form.resetFields();
     },
+    resetInForm() {
+      this.$refs.form1.resetFields();
+    },
     doSave() {
       console.log(this.form)
       this.$axios.post(this.$httpUrl + '/goods/save', this.form)
@@ -192,6 +282,26 @@ export default {
               this.centerDialogVisible = false
               this.loadPost()
               this.resetForm()
+            } else {
+              this.$message({
+                message: '操作失败',
+                type: 'error'
+              });
+            }
+          })
+    },
+    doInGoods() {
+      this.$axios.post(this.$httpUrl + '/record/save', this.form1)
+          .then(res => res.data)
+          .then(res => {
+            if (res.code == 200) {
+              this.$message({
+                message: '操作成功',
+                type: 'success'
+              });
+              this.inDialogVisible = false
+              this.loadPost()
+              this.resetInForm()
             } else {
               this.$message({
                 message: '操作失败',
@@ -239,6 +349,34 @@ export default {
         this.resetForm()
         this.form.id = ''
       })
+    },
+    outGoods(){
+      if(!this.currentRow.id){
+        alert('请选择记录')
+        return;
+      }
+      this.inDialogVisible = true
+      this.$nextTick(() => { //异步执行
+        this.resetInForm()
+      })
+      this.form1.goodsname = this.currentRow.name;
+      this.form1.goods = this.currentRow.id;
+      this.form1.admin_id = this.user.id
+      this.form1.action = '2'
+    },
+    inGoods() {
+      if(!this.currentRow.id){
+        alert('请选择记录')
+        return;
+      }
+      this.inDialogVisible = true
+      this.$nextTick(() => { //异步执行
+        this.resetInForm()
+      })
+      this.form1.goodsname = this.currentRow.name;
+      this.form1.goods = this.currentRow.id;
+      this.form1.admin_id = this.user.id
+      this.form1.action = '1'
     },
     mod(row) {
       this.centerDialogVisible = true

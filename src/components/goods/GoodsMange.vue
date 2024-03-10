@@ -211,7 +211,8 @@ export default {
         userId: '',
         admin_id: '',
         remark: '',
-        action: '1'
+        action: '1',
+        createtime: Date.now()
       },
       rules1: {
 

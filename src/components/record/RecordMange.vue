@@ -62,6 +62,7 @@ export default {
   name: 'RecordMange',
   data() {
     return {
+      user: JSON.parse(sessionStorage.getItem('CurUser')),
       goodsTypeData: [],
       storageData: [],
       tableData: [],
@@ -102,7 +103,9 @@ export default {
         param: {
           name: this.name,
           storage: this.storage + '',
-          goodsType: this.goodsType + ''
+          goodsType: this.goodsType + '',
+          roleId: this.user.roleId + '',
+          userId: this.user.id + ''
         }
       })
           .then(res => res.data)

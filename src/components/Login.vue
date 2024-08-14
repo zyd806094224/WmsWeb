@@ -57,7 +57,7 @@ export default {
                   //存储
                   sessionStorage.setItem("CurUser", JSON.stringify(res.data.user))
                   console.log(JSON.stringify(res.data.menu))
-                  this.$store.commit("setMenu",res.data.menu)
+                  this.$store.commit("setMenu", res.data.menu)
                   //跳转到主页
                   this.$router.replace('/Index');
                 } else {
@@ -65,7 +65,13 @@ export default {
                   alert('校验失败，用户名或密码错误！')
                   return false;
                 }
-              })
+              }).catch(error => { //异常情况处理
+            this.confirm_disabled = false;
+            // 在这里处理 Network Error
+            if (error.message === 'Network Error') {
+              alert('网络错误，请检查您的网络连接')
+            }
+          })
         } else {
           this.confirm_disabled = false;
           console.log('校验失败')

@@ -193,7 +193,10 @@ export default {
             } else {
               alert('获取数据失败')
             }
-          })
+          }).catch(error => {
+        console.log(error)
+        alert('接口请求异常')
+      })
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);

@@ -45,6 +45,15 @@ export default {
     }
   },
   methods: {
+    testJsonP(){
+      // 定义回调函数
+      window.handleResponse = (data) => {
+        console.log('Response:', data);
+      };
+      let script = document.createElement('script');
+      script.src = 'http://10.253.55.126:8088/jsonp/api?callback=handleResponse';
+      document.body.appendChild(script);
+    },
     async requestLogin(loginForm) {
       try {
         const response = await this.$axios.post(this.$httpUrl + "/user/login", loginForm)
@@ -68,6 +77,8 @@ export default {
       }
     },
     confirm() {
+      // this.testJsonP()
+      // if(true) return
       this.confirm_disabled = true;
       this.$refs.loginForm.validate((valid) => {
         if (valid) {// valid成功为true,失败为false

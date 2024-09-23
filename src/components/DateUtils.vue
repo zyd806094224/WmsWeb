@@ -61,8 +61,8 @@ export default {
       // return `${this.time.hour}:${this.time.minitus}:${this.time.seconds}`;
     },
     getIncrease(num, digit) {
-      var increase = "";
-      for (var i = 0; i < digit; i++) {
+      let increase = "";
+      for (let i = 0; i < digit; i++) {
         increase += "0";
       }
       return (increase + num).slice(-digit);

@@ -45,33 +45,56 @@ export default {
     }
   },
   methods: {
+    async requestLogin(loginForm) {
+      try {
+        const response = await this.$axios.post(this.$httpUrl + "/user/login", loginForm)
+        this.confirm_disabled = false;
+        let res = response.data;
+        console.log(res)
+        if (res.code == 200) {
+          //存储
+          sessionStorage.setItem("CurUser", JSON.stringify(res.data.user))
+          console.log(JSON.stringify(res.data.menu))
+          this.$store.commit("setMenu", res.data.menu)
+          //跳转到主页
+          await this.$router.replace('/Index');
+        } else {
+          alert('校验失败，用户名或密码错误！')
+        }
+      } catch (e) {
+        this.confirm_disabled = false;
+        console.log(`catch===${e}`)
+        alert('校验出现异常了')
+      }
+    },
     confirm() {
       this.confirm_disabled = true;
       this.$refs.loginForm.validate((valid) => {
         if (valid) {// valid成功为true,失败为false
           //后台验证
-          this.$axios.post(this.$httpUrl + "/user/login", this.loginForm)
-              .then(res => res.data)
-              .then(res => {
-                if (res.code == 200) {
-                  //存储
-                  sessionStorage.setItem("CurUser", JSON.stringify(res.data.user))
-                  console.log(JSON.stringify(res.data.menu))
-                  this.$store.commit("setMenu", res.data.menu)
-                  //跳转到主页
-                  this.$router.replace('/Index');
-                } else {
-                  this.confirm_disabled = false;
-                  alert('校验失败，用户名或密码错误！')
-                  return false;
-                }
-              }).catch(error => { //异常情况处理
-            this.confirm_disabled = false;
-            // 在这里处理 Network Error
-            if (error.message === 'Network Error') {
-              alert('网络错误，请检查您的网络连接')
-            }
-          })
+          this.requestLogin(this.loginForm)
+          // this.$axios.post(this.$httpUrl + "/user/login", this.loginForm)
+          //     .then(res => res.data)
+          //     .then(res => {
+          //       if (res.code == 200) {
+          //         //存储
+          //         sessionStorage.setItem("CurUser", JSON.stringify(res.data.user))
+          //         console.log(JSON.stringify(res.data.menu))
+          //         this.$store.commit("setMenu", res.data.menu)
+          //         //跳转到主页
+          //         this.$router.replace('/Index');
+          //       } else {
+          //         this.confirm_disabled = false;
+          //         alert('校验失败，用户名或密码错误！')
+          //         return false;
+          //       }
+          //     }).catch(error => { //异常情况处理
+          //   this.confirm_disabled = false;
+          //   // 在这里处理 Network Error
+          //   if (error.message === 'Network Error') {
+          //     alert('网络错误，请检查您的网络连接')
+          //   }
+          // })
         } else {
           this.confirm_disabled = false;
           console.log('校验失败')

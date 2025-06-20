@@ -7,6 +7,11 @@ const routes = [
         component: () => import('../components/Login')
     },
     {
+        path: '/Sms',
+        name: 'Sms',
+        component: () => import('../components/sms/Sms')
+    },
+    {
         path: '/Index',
         name: 'index',
         component: () => import('../components/Index'),

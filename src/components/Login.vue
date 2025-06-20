@@ -56,17 +56,18 @@ export default {
     },
     async requestLogin(loginForm) {
       try {
-        const response = await this.$axios.post(this.$httpUrl + "/user/login", loginForm)
+        const response = await this.$http.post("/user/login", loginForm)
         this.confirm_disabled = false;
-        let res = response.data;
-        console.log(res)
-        if (res.code == 200) {
+        let data = response.data;
+        console.log(response)
+        if (response.code == 200) {
           //存储
-          sessionStorage.setItem("CurUser", JSON.stringify(res.data.user))
-          console.log(JSON.stringify(res.data.menu))
-          this.$store.commit("setMenu", res.data.menu)
+          sessionStorage.setItem("CurUser", JSON.stringify(data.user))
+          localStorage.setItem("user-token", data.token)
+          console.log(JSON.stringify(data.menu))
+          this.$store.commit("setMenu", data.menu)
           //跳转到主页
-          await this.$router.replace('/Index');
+          await this.$router.replace('/Sms');
         } else {
           alert('校验失败，用户名或密码错误！')
         }

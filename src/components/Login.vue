@@ -64,8 +64,6 @@ export default {
           //存储
           sessionStorage.setItem("CurUser", JSON.stringify(data.user))
           localStorage.setItem("user-token", data.token)
-          console.log(JSON.stringify(data.menu))
-          this.$store.commit("setMenu", data.menu)
           //跳转到主页
           await this.$router.replace('/Sms');
         } else {

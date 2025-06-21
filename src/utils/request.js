@@ -5,7 +5,8 @@ import router from '@/router'; // 可选：路由跳转
 
 // 创建实例
 const service = axios.create({
-    baseURL: "http://localhost:8088", // 从环境变量读取
+    // baseURL: "http://localhost:8088", // 从环境变量读取
+    baseURL: "http://106.15.7.132:8088", // 从环境变量读取
     timeout: 30000,
     headers: {
         'Content-Type': 'application/json', // 默认头

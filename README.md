@@ -1,25 +1,101 @@
-# WmsWeb
-#wms前端工程
+# 仓库管理系统 (WMS) 前端
 
-## Project setup
+本项目是一个基于Vue.js的仓库管理系统前端实现，提供完整的仓库管理功能界面。
+
+## 项目概述
+
+该系统主要用于管理仓库中的各类资源，包括：
+- 用户权限管理（管理员、普通用户）
+- 物资管理（物品信息维护）
+- 物资分类管理
+- 仓库管理
+- 出入库记录管理
+
+系统采用前后端分离架构，前端使用Vue.js框架及相关生态系统，通过RESTful API与后端服务进行数据交互。
+
+## 技术栈
+
+- Vue.js 2.x
+- Vue Router
+- Vuex
+- Element UI
+- Axios
+
+## 功能模块
+
+1. **用户管理**
+   - 管理员管理
+   - 普通用户管理
+
+2. **物资管理**
+   - 物资信息维护
+   - 物资分类管理
+
+3. **仓库管理**
+   - 仓库信息维护
+
+4. **记录管理**
+   - 出入库记录查询
+
+## 项目结构
+
+```
+src/
+├── assets/              # 静态资源
+├── components/          # 组件
+│   ├── admin/           # 管理员管理组件
+│   ├── goods/           # 物资管理组件
+│   ├── goodstype/       # 物资分类管理组件
+│   ├── record/          # 记录管理组件
+│   ├── storage/         # 仓库管理组件
+│   ├── user/            # 用户管理组件
+│   └── 公共组件          # 如页面布局相关组件
+├── router/              # 路由配置
+├── store/               # Vuex状态管理
+├── App.vue             # 根组件
+└── main.js             # 入口文件
+```
+
+## 项目设置
+
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### 开发环境运行
+
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### 生产环境构建
+
 ```
 npm run build
 ```
 
-### Lints and fixes files
+### 代码检查和修复
+
 ```
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## 系统截图
+
+_(可根据实际情况添加系统界面截图)_
+
+## 配置说明
+
+参见 [Vue CLI 配置参考](https://cli.vuejs.org/config/)
+
+## 部署说明
+
+_(可添加部署相关的说明)_
+
+## 贡献者
+
+_(可添加项目贡献者信息)_
+
+## 许可证
+
+_(可添加项目许可证信息)_
